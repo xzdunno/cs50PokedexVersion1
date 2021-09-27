@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -12,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +24,8 @@ private TextView nameTextView;
 private TextView numberTextView;
 private TextView type1TextView;
 private TextView type2TextView;
-private String url;
+private ImageView pokemonImage;
+private String url,urlImage;
 private RequestQueue requestQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,9 @@ requestQueue= Volley.newRequestQueue(getApplicationContext());
         numberTextView=findViewById(R.id.pokemon_number);
         type1TextView=findViewById(R.id.type1);
         type2TextView=findViewById(R.id.type2);
+        pokemonImage=findViewById(R.id.pokemonImage);
         load();
+
     }
 
 public void load(){
@@ -45,6 +50,8 @@ public void load(){
                         nameTextView.setText(response.getString("name"));
                         numberTextView.setText(String.format("#%03d",response.getInt("id")));
 JSONArray typeEntries=response.getJSONArray("types");
+urlImage=response.getJSONObject("sprites").getString("front_default");
+Glide.with(pokemon_activity.this).load(urlImage).into(pokemonImage);
 for(int i=0;i< typeEntries.length();i++){
     JSONObject typeEntry=typeEntries.getJSONObject(i);
     int slot=typeEntry.getInt("slot");
@@ -54,7 +61,8 @@ if(slot==1){
 }
 else if(slot==2){
     type2TextView.setText(type);}
-}}
+}
+                    }
 
                      catch (JSONException e) {
                         Log.e("pokemonmistake", "Pokemon json error", e);
@@ -66,6 +74,8 @@ else if(slot==2){
                     Log.e("pokemonmistake", "pokemon details error");
                 }
             });
+
             requestQueue.add(request);
+
         }
     }

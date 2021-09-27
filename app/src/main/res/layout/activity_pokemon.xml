@@ -14,6 +14,11 @@
     android:textSize="18dp"
     android:paddingTop="10dp"
     />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pokemonImage"
+        ></ImageView>
     <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
